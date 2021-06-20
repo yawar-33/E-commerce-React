@@ -4,9 +4,9 @@ import isNull from '../../utilities/nullChecking'
 import login from '../../actions/login'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-function Login(props) {
- 
+import { Redirect,withRouter } from 'react-router-dom'
 
+function Login(props) {
   let initLoginModel = {
     email: '',
     password: '',
@@ -20,6 +20,7 @@ function Login(props) {
 
   const [loginModel, setloginModel] = useState(initLoginModel)
   const [validateModel, setvalidateModel] = useState(initValidateModel)
+  const [token, settoken] = useState('')
   const handleChange = (e) => {
     const { name, value } = e.target
     let model = { ...loginModel }
@@ -72,6 +73,8 @@ function Login(props) {
       POST('user/login', loginModel)
         .then((res) => {
           props.login(res.data.token)
+          settoken(res.data ? res.data.token : '')
+
           console.log(res)
         })
         .catch((err) => {
@@ -79,7 +82,9 @@ function Login(props) {
         })
     }
   }
-
+  if (token) {
+    return <Redirect to="dashboard" />
+  }
   return (
     <div id="login">
       <h3 className="text-center text-white pt-5">Login form</h3>
@@ -159,4 +164,4 @@ function matchDispatchToProps(dispatch) {
     dispatch,
   )
 }
-export default connect(null, matchDispatchToProps)(Login)
+export default withRouter(connect(null, matchDispatchToProps)(Login))
