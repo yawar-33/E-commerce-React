@@ -109,15 +109,13 @@ function MainPage(props) {
 
         <main className="page-content">
           <Switch>
-            <Route path={`${match.path}`}>
-              <Dashboard />
-            </Route>
-            <Route path={`${match.path}/category`}>
-              <Category />
-            </Route>
-            <Route path={`${match.path}/dashboard`}>
-              <Dashboard />
-            </Route>
+            <Route path={`${match.path}`} exact component={Dashboard} />
+            <Route path={`${match.path}/category`} exact component={Category} />
+            <Route
+              path={`${match.path}/dashboard`}
+              exact
+              component={Dashboard}
+            />
           </Switch>
         </main>
       </div>
