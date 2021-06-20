@@ -4,7 +4,7 @@ import isNull from '../../utilities/nullChecking'
 import login from '../../actions/login'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Redirect,withRouter } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 
 function Login(props) {
   let initLoginModel = {
@@ -72,7 +72,7 @@ function Login(props) {
     } else {
       POST('user/login', loginModel)
         .then((res) => {
-          props.login(res.data.token)
+          props.login(res.data)
           settoken(res.data ? res.data.token : '')
 
           console.log(res)
@@ -82,8 +82,8 @@ function Login(props) {
         })
     }
   }
-  if (token) {
-    return <Redirect to="dashboard" />
+  if (isNull(token) === false) {
+    return <Redirect to="/ecommerce-admin" />
   }
   return (
     <div id="login">

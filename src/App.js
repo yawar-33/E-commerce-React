@@ -2,7 +2,7 @@ import './asserts/css/style.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './asserts/fontawesome-free-5.15.3-web/css/all.css'
 import Login from './components/user/Login'
-import Dashboard from './components/dashboard/Dashboard'
+import MainPage from './components/dashboard/MainPage'
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,14 +18,14 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <ProtectedRoute path="/dashboard">
-            <Dashboard />
+          <ProtectedRoute path="/ecommerce-admin">
+            <MainPage />
           </ProtectedRoute>
           <Route exact path="/">
-            <Redirect exact from="/" to="dashboard" />
+            <Redirect exact from="/" to="ecommerce-admin" />
           </Route>
           <Route path="*">
-            <Redirect from="/" to="dashboard" />
+            <Redirect from="/" to="/login" />
           </Route>
         </Switch>
       </Router>
