@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import GET from '../../utilities/getApiCall'
+import POST from '../../utilities/postApiCall'
+import PUT from '../../utilities/putAPICall'
 import { useSelector } from 'react-redux'
 
 export default function NewCategory(props) {
@@ -36,8 +38,33 @@ export default function NewCategory(props) {
     setCategModel(model)
   }
 
+  const saveCategory = () => {
+    POST('catagory/create', categModel, token)
+      .then((res) => {
+        console.log('Save Category', res)
+        props.onClose()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const updateCategory = () => {
+    PUT('catagory/updateCatagory', categModel, token)
+      .then((res) => {
+        console.log('Update Category', res)
+        props.onClose()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
   const saveData = () => {
-    console.log(categModel)
+    if (editID > 0) {
+      updateCategory()
+    } else {
+      saveCategory()
+    }
   }
   return (
     <>
@@ -56,11 +83,12 @@ export default function NewCategory(props) {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title custom_align" id="Heading">
-                Edit Your Detail
+                {editID > 0 ? 'Edit Your Detail' : 'Enter New Category'}
               </h4>
             </div>
             <div className="modal-body">
               <div className="form-group">
+                <label htmlFor="name">Name</label>
                 <input
                   className="form-control "
                   type="text"
@@ -71,6 +99,7 @@ export default function NewCategory(props) {
                 />
               </div>
               <div className="form-group">
+                <label htmlFor="description">Description</label>
                 <textarea
                   rows="2"
                   className="form-control"

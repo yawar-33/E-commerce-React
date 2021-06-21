@@ -33,6 +33,7 @@ function Category(props) {
   const handleClose = () => {
     setshowPopup(false)
     setid(0)
+    getAllCategories()
   }
   let popup = ''
   if (showPopup) {
@@ -51,7 +52,7 @@ function Category(props) {
               <div className="col-md-2">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   onClick={() => openPopup(0)}
                 >
                   Add New
@@ -60,7 +61,7 @@ function Category(props) {
             </div>
 
             <div className="table-responsive">
-              <table class="table table-striped">
+              <table className="table table-striped">
                 <thead>
                   <th>Name</th>
                   <th>Description</th>
