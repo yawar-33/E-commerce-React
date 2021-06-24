@@ -5,9 +5,25 @@ import { connect, useSelector } from 'react-redux'
 import { Switch, Route, Link, withRouter } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Category from '../category/Category'
+import Product from '../product/Product'
 function MainPage(props) {
   const { match } = { ...props }
   const [isToggle, setisToggle] = useState(true)
+
+  const menuItems = [
+    {
+      name: 'Dashboard',
+      to: `${match.path}/dashboard`,
+    },
+    {
+      name: 'Category',
+      to: `${match.path}/category`,
+    },
+    {
+      name: 'Product',
+      to: `${match.path}/product`,
+    }
+  ]
 
   const userInfo = useSelector((state) =>
     state.login ? state.login.token.userInfo : null,
@@ -70,7 +86,16 @@ function MainPage(props) {
 
             <div className="sidebar-menu">
               <ul>
-                <li className="">
+                {menuItems.map((item)=>{
+                  return(
+                    <li className="">
+                    <Link to={item.to}>
+                      <span>{item.name}</span>
+                    </Link>
+                  </li>
+                  )
+                })}
+                {/* <li className="">
                   <Link to={`${match.path}/dashboard`}>
                     <span>Dashboard</span>
                   </Link>
@@ -79,7 +104,7 @@ function MainPage(props) {
                   <Link to={`${match.path}/category`}>
                     <span>Category</span>
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -111,6 +136,7 @@ function MainPage(props) {
           <Switch>
             <Route path={`${match.path}`} exact component={Dashboard} />
             <Route path={`${match.path}/category`} exact component={Category} />
+            <Route path={`${match.path}/product`} exact component={Product} />
             <Route
               path={`${match.path}/dashboard`}
               exact
