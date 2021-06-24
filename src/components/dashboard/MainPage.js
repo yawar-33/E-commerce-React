@@ -88,7 +88,7 @@ function MainPage(props) {
               <ul>
                 {menuItems.map((item)=>{
                   return(
-                    <li className="">
+                    <li className="" key={item.name}>
                     <Link to={item.to}>
                       <span>{item.name}</span>
                     </Link>
