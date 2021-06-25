@@ -6,6 +6,7 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Category from '../category/Category'
 import Product from '../product/Product'
+import Customer from '../customer/Customer'
 function MainPage(props) {
   const { match } = { ...props }
   const [isToggle, setisToggle] = useState(true)
@@ -22,7 +23,11 @@ function MainPage(props) {
     {
       name: 'Product',
       to: `${match.path}/product`,
-    }
+    },
+    {
+      name: 'Customer',
+      to: `${match.path}/customer`,
+    },
   ]
 
   const userInfo = useSelector((state) =>
@@ -86,13 +91,13 @@ function MainPage(props) {
 
             <div className="sidebar-menu">
               <ul>
-                {menuItems.map((item)=>{
-                  return(
+                {menuItems.map((item) => {
+                  return (
                     <li className="" key={item.name}>
-                    <Link to={item.to}>
-                      <span>{item.name}</span>
-                    </Link>
-                  </li>
+                      <Link to={item.to}>
+                        <span>{item.name}</span>
+                      </Link>
+                    </li>
                   )
                 })}
                 {/* <li className="">
@@ -142,6 +147,7 @@ function MainPage(props) {
               exact
               component={Dashboard}
             />
+            <Route path={`${match.path}/customer`} exact component={Customer} />
           </Switch>
         </main>
       </div>

@@ -1,42 +1,35 @@
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
 import GET from '../../utilities/getApiCall'
-import NewProduct from './NewProduct'
-export default function Product(params) {
+import { useSelector } from 'react-redux'
+export default function Customer(props) {
   const token = useSelector((state) =>
     state.login ? state.login.token.token : null,
   )
+  const [data, setdata] = useState([])
 
-  const [data, setData] = useState([])
-  const [showPopup, setshowPopup] = useState(false)
-  const [id, setid] = useState(0)
-  const getAllProducts = () => {
-    GET('product/findAll', token)
+  useEffect(() => {
+    getAllCustomers()
+  }, [])
+
+  const getAllCustomers = () => {
+    GET('customer/findAll', token)
       .then((res) => {
-        setData(res.data.productCollection)
+        setdata(res.data.customerCollection)
       })
       .catch((error) => {
         console.log(error)
       })
   }
-  useEffect(() => {
-    getAllProducts()
-  }, [])
-
-  const openPopup = (id) => {
-    setshowPopup(true)
-    setid(id)
-  }
-
-  const handleClose = () => {
-    setshowPopup(false)
-    setid(0)
-    getAllProducts()
-  }
-  let popup = ''
-  if (showPopup) {
-    popup = <NewProduct id={id} onClose={handleClose} />
-  }
+  let columns = [
+    { header: 'Name' },
+    { header: 'Email' },
+    { header: 'Address' },
+    { header: 'City' },
+    { header: 'Postal Code' },
+    { header: 'Country' },
+    { header: 'Edit' },
+    { header: 'Delete' },
+  ]
   return (
     <>
       <div className="container">
@@ -45,13 +38,13 @@ export default function Product(params) {
             <div className="row">
               <div className="col-md-10">
                 {' '}
-                <h4>List of All Products</h4>
+                <h4>List of All Customers</h4>
               </div>
               <div className="col-md-2">
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={() => openPopup(0)}
+                  //   onClick={() => openPopup(0)}
                 >
                   Add New
                 </button>
@@ -62,9 +55,11 @@ export default function Product(params) {
               <table className="table table-striped">
                 <thead>
                   <th>Name</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Units</th>
+                  <th>Email</th>
+                  <th>Address</th>
+                  <th>City</th>
+                  <th>Postal Code</th>
+                  <th>Country</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </thead>
@@ -73,14 +68,16 @@ export default function Product(params) {
                     data.map((row) => {
                       return (
                         <tr>
-                          <td>{row.name}</td>
-                          <td>{row.description}</td>
-                          <td>{row.price}</td>
-                          <td>{row.units}</td>
+                          <td >{row.firstName + ' ' + row.lastName}</td>
+                          <td>{row.email}</td>
+                          <td>{row.address}</td>
+                          <td>{row.city}</td>
+                          <td>{row.postalCode}</td>
+                          <td>{row.country}</td>
                           <td>
                             <i
                               className="fa fa-edit "
-                              onClick={() => openPopup(row.id)}
+                              //   onClick={() => openPopup(row.id)}
                             ></i>
                           </td>
                           <td>
@@ -97,7 +94,6 @@ export default function Product(params) {
           </div>
         </div>
       </div>
-      {popup}
     </>
   )
 }

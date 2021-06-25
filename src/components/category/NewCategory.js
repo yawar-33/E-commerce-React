@@ -3,6 +3,7 @@ import GET from '../../utilities/getApiCall'
 import POST from '../../utilities/postApiCall'
 import PUT from '../../utilities/putAPICall'
 import { useSelector } from 'react-redux'
+import isNull from '../../utilities/nullChecking'
 
 export default function NewCategory(props) {
   const token = useSelector((state) =>
@@ -14,8 +15,17 @@ export default function NewCategory(props) {
     name: '',
     description: '',
   }
+
+  let initValidateModel = {
+    valName: '',
+    valDescription: '',
+    isvalid: false,
+  }
+
   const [editID] = useState(initailModel.id)
   const [categModel, setCategModel] = useState(initailModel)
+  const [validationModel, setValidationModel] = useState(initValidateModel)
+
   const getCatagoryDetailBYID = () => {
     GET('catagory/findCatagoryById/' + editID, token)
       .then((res) => {
@@ -60,10 +70,43 @@ export default function NewCategory(props) {
       })
   }
   const saveData = () => {
-    if (editID > 0) {
-      updateCategory()
+    let validationResponse = validateModel()
+    if (validationResponse) {
+      return
     } else {
-      saveCategory()
+      if (editID > 0) {
+        updateCategory()
+      } else {
+        saveCategory()
+      }
+    }
+  }
+
+  const validateModel = () => {
+    let model = { ...categModel }
+    let valModel = { ...validationModel }
+    if (isNull(model.name)) {
+      valModel.valName = (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          Enter Name
+        </div>
+      )
+      valModel.isvalid = true
+      setValidationModel(valModel)
+      return true
+    } else if (isNull(model.description)) {
+      valModel.valDescription = (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          Enter Description
+        </div>
+      )
+      valModel.isvalid = true
+      setValidationModel(valModel)
+      return true
+    } else {
+      valModel.isvalid = false
+      setValidationModel(valModel)
+      return false
     }
   }
   return (
@@ -97,6 +140,7 @@ export default function NewCategory(props) {
                   value={categModel.name}
                   onChange={handleChange}
                 />
+                {validationModel.valName}
               </div>
               <div className="form-group">
                 <label htmlFor="description">Description</label>
@@ -108,6 +152,7 @@ export default function NewCategory(props) {
                   value={categModel.description}
                   onChange={handleChange}
                 ></textarea>
+                {validationModel.valDescription}
               </div>
             </div>
             <div className="modal-footer ">
